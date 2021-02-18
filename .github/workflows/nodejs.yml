@@ -37,6 +37,10 @@ jobs:
         # echo 'cd dist/ 进入dist文件夹'
         cd dist/
 
+        # config default branch
+        echo 'config default branch'
+        git config --global init.defaultBranch main
+
         echo 'ls 查看dist文件夹下的所有文件'
         ls
 

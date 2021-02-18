@@ -32,41 +32,8 @@ jobs:
     - name: 执行npm run build
       run: |
         npm run build
-    - name: 进入dist文件夹 准备提交代码
-      run: |
-        # echo 'cd dist/ 进入dist文件夹'
-        cd dist/
-
-        # config default branch
-        echo 'config default branch'
-        git config --global init.defaultBranch main
-
-        echo 'ls 查看dist文件夹下的所有文件'
-        ls
-
-        echo 'git init'
-        git init
-        
-        echo 'git config'
-        git config --global user.name ${{ secrets.USER_NAME }}
-        git config --global user.email ${{ secrets.USER_EMAIL }}
-        
-        echo 'git remote set-url'
-        git remote set-url origin https://github.com/lexmin0412/vite-react-app.git
-        
-        echo 'git fetch origin'
-        git fetch origin 
-        
-        echo 'git branch -r'
-        git branch -r
-        echo 'git branch -l'
-        git branch -l
-
-        echo 'git add .'
-        git add .
-
-        echo 'git commit -m "deploy"'
-        git commit -m 'deploy'
-
-        # git push -f origin master:gh-pages
-        git push -f origin HEAD:master
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./dist

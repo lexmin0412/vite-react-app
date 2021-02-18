@@ -1,39 +1,28 @@
-name: Node CI
-
-# 指定触发action的事件
+name: CI
 on:
   push:
-    # 指定触发指定事件的分支 仅master触发
     branches:
       - main
-  pull_request:   # 待测试
-    branches:
-      - master
+
 jobs:
-  build:
-
+  main:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ strategy.matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
-        node-version: ${{ strategy.matrix.node-version }}
-    - name: 执行npm install
+        persist-credentials: false
+        
+    # react项目为npm run-script build，vue项目改为npm run build
+    - name: Install and Build
       run: |
         npm install
-      env:
-        CI: true
-    - name: 执行npm run build
-      run: |
         npm run build
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
+     
+    # react项目的FOLDER为build，vue项目改为dist   
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
-        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        publish_dir: ./dist
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist
